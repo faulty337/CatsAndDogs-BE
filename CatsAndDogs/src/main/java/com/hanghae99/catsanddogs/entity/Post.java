@@ -7,7 +7,7 @@ import java.util.List;
 
 
 @Entity
-public class Post extends TimeStamped{
+public class Post extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +33,5 @@ public class Post extends TimeStamped{
 
     @OneToMany
     private List<Comment> commentList = new ArrayList<>();
+
 }

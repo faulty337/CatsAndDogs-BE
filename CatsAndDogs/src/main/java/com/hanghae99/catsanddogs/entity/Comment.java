@@ -1,12 +1,11 @@
 package com.hanghae99.catsanddogs.entity;
 
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Comment extends TimeStamped{
+public class Comment extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +21,6 @@ public class Comment extends TimeStamped{
 
     @ManyToOne
     private User user;
-
 
 
 }
