@@ -1,7 +1,10 @@
 package com.hanghae99.catsanddogs.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 
+@Getter
 @Entity
 @Table(name = "users")
 public class User {
