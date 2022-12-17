@@ -11,13 +11,14 @@ public class GlobalExceptionHandler{
 
     @ExceptionHandler({CustomException.class})
     protected ResponseEntity handleCustomException(CustomException ex){
-        return new ResponseEntity( new ResponseMessage<String>( ex.getMessage(), ex.getErrorCode().getStatusCode(), "error" )
+        System.out.println(ex.getMessage());
+        return new ResponseEntity( new ResponseMessage( ex.getErrorCode().getMsg(), ex.getErrorCode().getStatusCode(), ex.getErrorCode() )
                                     , HttpStatus.valueOf(ex.getErrorCode().getStatusCode()));
     }
 
     @ExceptionHandler({Exception.class})
     protected ResponseEntity handleServerException(Exception ex){
-        return new ResponseEntity(new ResponseMessage<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "error")
+        return new ResponseEntity(new ResponseMessage(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "error")
                                     , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

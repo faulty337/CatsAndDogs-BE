@@ -47,16 +47,9 @@ public class WebSecurityConfig {
         http.csrf().disable();
 
         http.authorizeRequests()
-
-                /* 유저 로그인 기능 개발 전까지 비활성화
-
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/post").permitAll()
                 .antMatchers("/post/{id}").permitAll()
-
-                 */
-
-                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         return http.build();
