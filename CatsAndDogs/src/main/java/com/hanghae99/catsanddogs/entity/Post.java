@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Post extends TimeStamped{
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +23,7 @@ public class Post extends TimeStamped{
 
     private String content;
 
-    private long likeCount;
+    private Long likeCount;
 
     //수정일
 
@@ -39,6 +40,7 @@ public class Post extends TimeStamped{
     @OneToMany
     private List<Comment> commentList = new ArrayList<>();
 
+
     public Post(String title, String content, String picturePath, CategoryEnum category) {
         this.title = title;
         this.content = content;
@@ -50,3 +52,4 @@ public class Post extends TimeStamped{
         this.commentList.add(comment);
     }
 }
+

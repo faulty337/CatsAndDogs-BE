@@ -1,6 +1,5 @@
 package com.hanghae99.catsanddogs.entity;
 
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,7 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Comment extends TimeStamped{
+public class Comment extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,3 +33,4 @@ public class Comment extends TimeStamped{
         this.user = user;
     }
 }
+
