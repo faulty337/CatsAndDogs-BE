@@ -12,10 +12,10 @@ class CommentController {
 
 
     //응답 예시(ResponseEntity)
-    @GetMapping
-    public ResponseEntity<ResponseMessage> commentTest(){
-        CommentResponseDto commentResponseDto = new CommentResponseDto("댓글");
-        ResponseMessage<CommentResponseDto> responseMessage = new ResponseMessage("test", 200, commentResponseDto);
-        return new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
-    }
+//    @GetMapping
+//    public ResponseEntity<ResponseMessage> commentTest(){
+//        CommentResponseDto commentResponseDto = new CommentResponseDto("댓글");
+//        ResponseMessage<CommentResponseDto> responseMessage = new ResponseMessage("test", 200, commentResponseDto);
+//        return new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
+//    }
 }
