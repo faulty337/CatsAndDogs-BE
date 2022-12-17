@@ -1,5 +1,8 @@
 package com.hanghae99.catsanddogs.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -7,7 +10,9 @@ import java.util.List;
 
 
 @Entity
-public class Post {
+@Getter
+@NoArgsConstructor
+public class Post extends TimeStamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +22,7 @@ public class Post {
 
     private String content;
 
-    private Long likeCount;
+    private long likeCount;
 
     //수정일
 
@@ -33,4 +38,11 @@ public class Post {
 
     @OneToMany
     private List<Comment> commentList = new ArrayList<>();
+
+    public Post(String title, String content, String picturePath, CategoryEnum category) {
+        this.title = title;
+        this.content = content;
+        this.picturePath = picturePath;
+        this.category = category;
+    }
 }
