@@ -25,7 +25,7 @@ import java.util.Date;
 public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String AUTHORIZATION_KEY = "auth";
-    public static final String BEARER_PREFIX = "bearer";
+    public static final String BEARER_PREFIX = "bearer ";
     // 60 * 1000L는 1분
     public static final long TOKEN_TIME = (60*60*1000)/*1시간 설정*/ * 3; //3시간 설정
 
