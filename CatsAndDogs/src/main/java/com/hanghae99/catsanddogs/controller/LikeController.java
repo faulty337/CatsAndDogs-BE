@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
     @GetMapping
     public ResponseEntity<ResponseMessage> commentLike(){
-       
+
     }
 }

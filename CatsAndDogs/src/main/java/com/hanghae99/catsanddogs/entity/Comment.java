@@ -1,10 +1,13 @@
 package com.hanghae99.catsanddogs.entity;
 
+import lombok.Getter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 public class Comment extends TimeStamped {
 
     @Id
