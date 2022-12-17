@@ -19,6 +19,8 @@ public enum ErrorCode {
     INCORRECT_PASSWORD("잘못된 비밀번호입니다.",404),
     AUTHORIZATION_DELETE_FAIL("삭제 권한이 없습니다.", 401),
     AUTHORIZATION_UPDATE_FAIL("수정 권한이 없습니다.", 401),
+    AUTHORIZATION_CREATE_FAIL("생성 권한이 없습니다.", 401),
+
 
     INTERNAL_SERVER_ERROR("서버 에러입니다. 서버 팀에 연락주세요!", 500);
 

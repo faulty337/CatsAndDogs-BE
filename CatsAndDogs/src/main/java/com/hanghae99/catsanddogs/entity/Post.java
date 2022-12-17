@@ -47,5 +47,9 @@ public class Post extends TimeStamped{
         this.picturePath = picturePath;
         this.category = category;
     }
+
+    public void addComment(Comment comment){
+        this.commentList.add(comment);
+    }
 }
 

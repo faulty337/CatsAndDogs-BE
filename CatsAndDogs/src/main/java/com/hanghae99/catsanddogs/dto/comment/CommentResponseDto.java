@@ -1,4 +1,4 @@
-package com.hanghae99.catsanddogs.dto;
+package com.hanghae99.catsanddogs.dto.comment;
 
 
 import com.hanghae99.catsanddogs.entity.Comment;
