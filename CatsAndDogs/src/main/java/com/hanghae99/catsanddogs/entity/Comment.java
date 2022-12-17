@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Comment {
+public class Comment extends TimeStamped{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +22,7 @@ public class Comment {
 
     @ManyToOne
     private User user;
+
+
 
 }
