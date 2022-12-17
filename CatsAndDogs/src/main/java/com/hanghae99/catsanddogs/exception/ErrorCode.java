@@ -11,6 +11,7 @@ public enum ErrorCode {
 
     //404 NOT_FOUND 잘못된 리소스 접근
     CONTENT_NOT_FOUND("존재하지 않는 게시글 입니다.",404),
+    COMMENT_NOT_FOUND("존재하지 않는 댓글 입니다.", 404),
     AUTHORIZATION_DELETE_FAIL("삭제 권한이 없습니다.", 404 ),
     AUTHORIZATION_UPDATE_FAIL("수정 권한이 없습니다.", 404),
 
