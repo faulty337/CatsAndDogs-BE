@@ -50,6 +50,10 @@ public class WebSecurityConfig {
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/post").permitAll()
                 .antMatchers("/post/{id}").permitAll()
+                .antMatchers("/v2/**").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
         return http.build();
