@@ -26,4 +26,7 @@ public class Comment extends TimeStamped {
     private User user;
 
 
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
 }

@@ -43,12 +43,16 @@ public class LikeService {
         if (likePost.isPresent()) {
             LikePost like = likePost.get();
             likePostRepository.delete(like);
+            Long likeCount = likePostRepository.countByPostId(postId);
+            post.setLikecount(post.getLikeCount()-1);
 
             return false;
 
         } else{
             LikePost like = new LikePost(postId, userId);
             likePostRepository.save(like);
+            Long likeCount = likePostRepository.countByPostId(postId);
+            post.setLikecount(post.getLikeCount()+1);
             return true;
         }
     }
@@ -64,11 +68,14 @@ public class LikeService {
         if(likeComment.isPresent()){
             LikeComment like = likeComment.get();
             likeCommentRepository.delete(like);
-
+            Long likeCount = likeCommentRepository.countByCommentId(commentId);
+            comment.setLikeCount(comment.getLikeCount()-1);
             return false;
 
         } else{
             LikeComment like = new LikeComment(commentId, userId);
+            Long likeCount = likeCommentRepository.countByCommentId(commentId);
+            comment.setLikeCount(comment.getLikeCount()+1);
             likeCommentRepository.save(like);
             return true;
         }
