@@ -1,6 +1,7 @@
 package com.hanghae99.catsanddogs.controller;
 
 
+import com.hanghae99.catsanddogs.dto.post.DetailResponseDto;
 import com.hanghae99.catsanddogs.dto.post.PostRequestDto;
 import com.hanghae99.catsanddogs.dto.post.PostResponseDto;
 import com.hanghae99.catsanddogs.dto.post.PostResponseListDto;
@@ -33,8 +34,8 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity getPost(@PathVariable Long postId){
         Long userId = 1L;
-        PostResponseDto postResponseDto = postService.getPost(postId, userId);
-        ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("조회 성공", 200, postResponseDto);
+        DetailResponseDto detailResponseDto = postService.getPost(postId, userId);
+        ResponseMessage<DetailResponseDto> responseMessage = new ResponseMessage<>("조회 성공", 200, detailResponseDto);
 
         return new ResponseEntity(responseMessage, HttpStatus.OK);
 

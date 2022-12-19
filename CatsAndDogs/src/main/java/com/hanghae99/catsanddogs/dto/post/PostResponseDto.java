@@ -26,11 +26,12 @@ public class PostResponseDto {
     private String picturePath;
     private String pictureName;
     private CategoryEnum category;
-    private List<CommentResponseDto> commentList = new ArrayList<>();
+//    private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public PostResponseDto(Post post, Long userId){
         this.id = post.getId();
         this.title = post.getTitle();
+        this.nickname = post.getNickname();
         this.content = post.getContent();
         this.likeCount = post.getLikeCount();
         this.postLike = post.getLikePostList().stream().anyMatch(likePost -> likePost.getUserId().equals(userId));
@@ -45,7 +46,7 @@ public class PostResponseDto {
         this.picturePath = post.getPicturePath();
         this.pictureName = post.getPictureName();
         this.category = post.getCategory();
-        this.commentList = post.getCommentList().stream().map(comment -> new CommentResponseDto(comment, userId)).collect(Collectors.toList());
+//        this.commentList = post.getCommentList().stream().map(comment -> new CommentResponseDto(comment, userId)).collect(Collectors.toList());
 
     }
 
