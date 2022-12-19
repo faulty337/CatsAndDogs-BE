@@ -23,9 +23,12 @@ public class Post extends TimeStamped {
 
     private String content;
 
+
+    private long likeCount;
+
     private String nickname;
 
-    private Long likeCount;
+
 
     //수정일
 
@@ -36,12 +39,14 @@ public class Post extends TimeStamped {
     private CategoryEnum category;
 
     @OneToMany
+    @JoinColumn(name = "commentId")
     private List<LikePost> likePostList = new ArrayList<>();
 
     @ManyToOne
     private User user;
 
     @OneToMany
+    @JoinColumn(name = "commentId")
     private List<Comment> commentList = new ArrayList<>();
 
 
