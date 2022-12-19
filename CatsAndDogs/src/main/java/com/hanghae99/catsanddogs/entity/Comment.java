@@ -18,7 +18,7 @@ public class Comment extends TimeStamped {
 
     private String content;
 
-    private long likeCount = 0L;
+    private Long likeCount;
 
     @OneToMany
     @JoinColumn(name = "commentId")
@@ -28,6 +28,9 @@ public class Comment extends TimeStamped {
     private User user;
 
 
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
     public Comment(String content, User user) {
         this.content = content;
         this.user = user;

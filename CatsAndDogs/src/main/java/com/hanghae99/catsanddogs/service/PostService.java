@@ -51,14 +51,15 @@ public class PostService {
     }
 
 
+    @Transactional
     public PostResponseDto createPost(PostRequestDto requestDto, MultipartFile file, User user) throws Exception {
 
         if(file.getContentType() == null || !file.getContentType().startsWith("image"))
             throw new CustomException(ErrorCode.WRONG_IMAGE_FORMAT);
 
 
-
         String picturePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\img"; //파일 저장 경로 지정
+
         UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
         String pictureName = uuid + "_" + file.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
         File saveFile = new File(picturePath, pictureName);
@@ -74,21 +75,22 @@ public class PostService {
     }
 
 
-//    public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, MultipartFile file) throws Exception {
-//
-//        String picturePath = System.getProperty("user.dir") + "\\CatsAndDogs\\src\\main\\resources\\static\\img"; //파일 저장 경로 지정
-//        UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
-//        String pictureName = uuid + "_" + file.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
-//        File saveFile = new File(picturePath, pictureName);
-//        file.transferTo(saveFile); // 업로드 한 파일 데이터를 지정한 파일에 저장
-//
-//        Post post = postRepository.findByIdAndUsername(postId).orElseThrow(
-//                () -> new CustomException(ErrorCode.CONTENT_NOT_FOUND)
-//        );
-//        post.update(requestDto, picturePath, pictureName);
-//
-//        return new PostResponseDto(post);
-//
-//
-//    }
+    @Transactional
+    public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, MultipartFile file, User user) throws Exception {
+
+        String picturePath = System.getProperty("user.dir") + "\\CatsAndDogs\\src\\main\\resources\\static\\img"; //파일 저장 경로 지정
+        UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
+        String pictureName = uuid + "_" + file.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
+        File saveFile = new File(picturePath, pictureName);
+        file.transferTo(saveFile); // 업로드 한 파일 데이터를 지정한 파일에 저장
+
+        Post post = postRepository.findByIdAndNickname(postId, user.getNickname()).orElseThrow(
+                () -> new CustomException(ErrorCode.CONTENT_NOT_FOUND)
+        );
+        post.update(requestDto, picturePath, pictureName);
+
+        return new PostResponseDto(post);
+
+
+    }
 }
