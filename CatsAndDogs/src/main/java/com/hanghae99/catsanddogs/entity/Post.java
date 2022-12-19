@@ -39,14 +39,14 @@ public class Post extends TimeStamped {
     private CategoryEnum category;
 
     @OneToMany
-    @JoinColumn(name = "commentId")
+    @JoinColumn(name = "postId")
     private List<LikePost> likePostList = new ArrayList<>();
 
     @ManyToOne
     private User user;
 
     @OneToMany
-    @JoinColumn(name = "commentId")
+    @JoinColumn(name = "postId")
     private List<Comment> commentList = new ArrayList<>();
 
 
