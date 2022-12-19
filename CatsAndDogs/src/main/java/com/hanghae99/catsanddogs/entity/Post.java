@@ -83,5 +83,9 @@ public class Post extends TimeStamped {
     }
 
 
+
+    public void setLikecount(long likeCount) {
+        this.likeCount = likeCount;
+    }
 }
 
