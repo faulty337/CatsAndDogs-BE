@@ -50,17 +50,17 @@ public class PostController {
         return new ResponseEntity(responseMessage, HttpStatus.OK);
     }
 
-//    @PutMapping("/{postId}") // 선택 게시글 수정
-//    public ResponseEntity updatePost(@PathVariable Long postId,
-//                                      @RequestPart(value = "file") MultipartFile file,
-//                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
-//                                      @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
-//
-//        PostResponseDto postResponseDto = postService.updatePost(postId, requestDto, file);
-//        ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 수정 성공", 200, postResponseDto);
-//        return new ResponseEntity(responseMessage, HttpStatus.OK);
-//
-//    }
+    @PutMapping("/{postId}") // 선택 게시글 수정
+    public ResponseEntity updatePost(@PathVariable Long postId,
+                                      @RequestPart(value = "file") MultipartFile file,
+                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+
+        PostResponseDto postResponseDto = postService.updatePost(postId, requestDto, file, userDetails.getUser());
+        ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 수정 성공", 200, postResponseDto);
+        return new ResponseEntity(responseMessage, HttpStatus.OK);
+
+    }
 
 
 
