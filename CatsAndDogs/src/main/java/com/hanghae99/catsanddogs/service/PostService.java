@@ -1,10 +1,7 @@
 package com.hanghae99.catsanddogs.service;
 
 import com.hanghae99.catsanddogs.dto.comment.CommentResponseDto;
-import com.hanghae99.catsanddogs.dto.post.DetailResponseDto;
-import com.hanghae99.catsanddogs.dto.post.PostRequestDto;
-import com.hanghae99.catsanddogs.dto.post.PostResponseDto;
-import com.hanghae99.catsanddogs.dto.post.PostResponseListDto;
+import com.hanghae99.catsanddogs.dto.post.*;
 import com.hanghae99.catsanddogs.entity.Post;
 import com.hanghae99.catsanddogs.entity.User;
 import com.hanghae99.catsanddogs.exception.CustomException;
@@ -16,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,14 +26,18 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public PostResponseListDto getPostList(Long userId) {
+    public MainResponseDto getPostList(Long userId) {
 
         List<Post> postList = postRepository.findAll(); //게시물이 많아지면 문제가 될듯
         PostResponseListDto postResponseListDto = new PostResponseListDto();
         for(Post post : postList){
             postResponseListDto.addPostResponseDto(new PostResponseDto(post, userId));
         }
-        return postResponseListDto;
+        List<PostResponseDto> rank = postRepository.findTop2ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime.now().minusDays(1)).stream().map(post -> new PostResponseDto(post, userId)).collect(Collectors.toList());
+        MainResponseDto mainResponseDto = new MainResponseDto(postResponseListDto, rank);
+
+        LocalDateTime.now().minusDays(1);
+        return mainResponseDto;
     }
 
     @Transactional(readOnly = true)

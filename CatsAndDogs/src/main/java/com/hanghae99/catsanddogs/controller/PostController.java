@@ -1,10 +1,7 @@
 package com.hanghae99.catsanddogs.controller;
 
 
-import com.hanghae99.catsanddogs.dto.post.DetailResponseDto;
-import com.hanghae99.catsanddogs.dto.post.PostRequestDto;
-import com.hanghae99.catsanddogs.dto.post.PostResponseDto;
-import com.hanghae99.catsanddogs.dto.post.PostResponseListDto;
+import com.hanghae99.catsanddogs.dto.post.*;
 import com.hanghae99.catsanddogs.dto.ResponseMessage;
 import com.hanghae99.catsanddogs.security.UserDetails.UserDetailsImpl;
 import com.hanghae99.catsanddogs.service.PostService;
@@ -25,8 +22,8 @@ public class PostController {
     @GetMapping
     public ResponseEntity getPostList(){
         Long userId = 1L;
-        PostResponseListDto postResponseListDto = postService.getPostList(userId);
-        ResponseMessage<PostResponseListDto> responseMessage = new ResponseMessage<>("조회 성공", 200, postResponseListDto);
+        MainResponseDto mainResponseDto = postService.getPostList(userId);
+        ResponseMessage<MainResponseDto> responseMessage = new ResponseMessage<>("조회 성공", 200, mainResponseDto);
 
         return new ResponseEntity(responseMessage, HttpStatus.OK);
 
