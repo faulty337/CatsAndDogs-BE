@@ -1,5 +1,6 @@
-package com.hanghae99.catsanddogs.dto;
+package com.hanghae99.catsanddogs.dto.post;
 
+import com.hanghae99.catsanddogs.dto.comment.CommentResponseDto;
 import com.hanghae99.catsanddogs.entity.CategoryEnum;
 import com.hanghae99.catsanddogs.entity.LikePost;
 import com.hanghae99.catsanddogs.entity.Post;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 public class PostResponseDto {
+    private String nickname;
     private long id;
     private String title;
     private String content;
@@ -22,6 +24,7 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private String picturePath;
+    private String pictureName;
     private CategoryEnum category;
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
@@ -40,10 +43,22 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
         this.picturePath = post.getPicturePath();
+        this.pictureName = post.getPictureName();
         this.category = post.getCategory();
         this.commentList = post.getCommentList().stream().map(comment -> new CommentResponseDto(comment, userId)).collect(Collectors.toList());
 
     }
 
 
+    public PostResponseDto(Post post) {
+        this.id = post.getId();
+        this.title = post.getTitle();
+        this.content = post.getContent();
+        this.createdAt = post.getCreatedAt();
+        this.modifiedAt = post.getModifiedAt();
+        this.picturePath = post.getPicturePath();
+        this.pictureName = post.getPictureName();
+        this.category = post.getCategory();
+        this.nickname = post.getNickname();
+    }
 }

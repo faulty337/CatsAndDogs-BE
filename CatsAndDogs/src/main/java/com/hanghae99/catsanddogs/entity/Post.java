@@ -1,10 +1,10 @@
 package com.hanghae99.catsanddogs.entity;
 
+import com.hanghae99.catsanddogs.dto.post.PostRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Post extends TimeStamped{
+public class Post extends TimeStamped {
 
 
     @Id
@@ -23,21 +23,30 @@ public class Post extends TimeStamped{
 
     private String content;
 
-    private Long likeCount;
+
+    private long likeCount;
+
+    private String nickname;
+
+
 
     //수정일
 
-    private String picturePath;
+    private String picturePath; // 사진 저장 경로
+
+    private String pictureName; // 사진 저장 이름
 
     private CategoryEnum category;
 
     @OneToMany
+    @JoinColumn(name = "commentId")
     private List<LikePost> likePostList = new ArrayList<>();
 
     @ManyToOne
     private User user;
 
     @OneToMany
+    @JoinColumn(name = "commentId")
     private List<Comment> commentList = new ArrayList<>();
 
 
@@ -47,6 +56,33 @@ public class Post extends TimeStamped{
         this.picturePath = picturePath;
         this.category = category;
     }
+
+
+    public void addComment(Comment comment) {
+        this.commentList.add(comment);
+    }
+
+
+    public Post(PostRequestDto requestDto, String picturePath, String pictureName, String nickname) {
+
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.category = requestDto.getCategory();
+        this.picturePath = picturePath;
+        this.pictureName = pictureName;
+        this.nickname = nickname;
+
+    }
+
+    public void update(PostRequestDto requestDto, String picturePath, String pictureName) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.picturePath = picturePath;
+        this.pictureName = pictureName;
+
+    }
+
+
 
     public void setLikecount(long likeCount) {
         this.likeCount = likeCount;

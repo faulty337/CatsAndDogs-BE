@@ -1,6 +1,7 @@
 package com.hanghae99.catsanddogs.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Comment extends TimeStamped {
 
     @Id
@@ -29,4 +31,9 @@ public class Comment extends TimeStamped {
     public void setLikeCount(long likeCount) {
         this.likeCount = likeCount;
     }
+    public Comment(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
 }
+
