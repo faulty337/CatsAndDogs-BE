@@ -2,6 +2,8 @@ package com.test.testserver.controller;
 
 import com.test.testserver.dto.*;
 import com.test.testserver.entity.CategoryEnum;
+import com.test.testserver.exception.CustomException;
+import com.test.testserver.exception.ErrorCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +39,10 @@ public class TestController {
 
     @GetMapping("/{postId}")
     public ResponseEntity getPost(@PathVariable Long postId){
+        if(postId.equals(4L)){
+            return new ResponseEntity( new ResponseMessage( new CustomException(ErrorCode.CONTENT_NOT_FOUND).getErrorCode().getMsg(), new CustomException(ErrorCode.CONTENT_NOT_FOUND).getErrorCode().getStatusCode(), new CustomException(ErrorCode.CONTENT_NOT_FOUND).getErrorCode())
+                    , HttpStatus.valueOf(new CustomException(ErrorCode.CONTENT_NOT_FOUND).getErrorCode().getStatusCode()));
+        }
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         for(int i = 1; i < postId+2; i++){
             commentResponseDtoList.add(new CommentResponseDto((long)i, "댓글내용"+i, "범준", i%3==0, LocalDateTime.now(), (long)3*i));
