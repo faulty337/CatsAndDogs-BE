@@ -11,6 +11,9 @@ public enum ErrorCode {
     INVALID_USERNAME_PATTERN("id는 소문자와 숫자 조합 4자리에서 10자리입니다.",400),
     INVALID_PASSWORD_PATTERN("비밀번호는 소문자, 대문자, 숫자, 특수문자(!@#$%^&+=) 조합 8자리에서 15자리입니다.",400),
     DUPLICATE_USERNAME("중복된 아이디가 존재합니다.", 400),
+    DUPLICATE_KAKAO_EMAIL("카카오 계정으로 가입된 회원입니다.", 400),
+    DUPLICATE_EMAIL("해당 이메일로 이미 가입된 회원입니다.", 400),
+    DUPLICATE_NICKNAME("중복된 닉네임이 존재합니다.", 400),
     REQUIRED_ALL("모든 항목이 필수값입니다.",400),
     //404 NOT_FOUND 잘못된 리소스 접근
     CONTENT_NOT_FOUND("존재하지 않는 게시글 입니다.",404),

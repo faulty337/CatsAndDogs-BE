@@ -51,6 +51,19 @@ public class UserService {
         if (checkUser.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
         }
+        //이메일 중복 확인
+        Optional<User> checkEmail = userRepository.findByEmail(signupRequestDto.getEmail());
+        if (checkEmail.isPresent()) {
+            if(checkEmail.get().getKakaoId() != null){
+                throw new CustomException(ErrorCode.DUPLICATE_KAKAO_EMAIL);
+            }
+            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+        }
+        //닉네임 중복 확인
+        Optional<User> checkNickname = userRepository.findByNickname(signupRequestDto.getNickname());
+        if (checkNickname.isPresent()) {
+            throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
+        }
         //닉네임과 이메일 빈 값 체크
         if(signupRequestDto.getEmail()==null || signupRequestDto.getNickname()==null){
             throw new CustomException(ErrorCode.REQUIRED_ALL);
