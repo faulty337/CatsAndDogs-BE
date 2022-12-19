@@ -5,11 +5,14 @@ import com.hanghae99.catsanddogs.dto.LikePostResponseDto;
 import com.hanghae99.catsanddogs.dto.ResponseMessage;
 import com.hanghae99.catsanddogs.security.UserDetails.UserDetailsImpl;
 import com.hanghae99.catsanddogs.service.LikeService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
 @RequiredArgsConstructor
 @RequestMapping("/like")
 @RestController
@@ -17,8 +20,9 @@ public class LikeController {
 
     private final LikeService likeService;
 
+    @ApiOperation(value = "댓글 좋아요")
     @PostMapping("/post/{postId}")
-    public ResponseEntity<ResponseMessage> likePost(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<ResponseMessage> likePost(@PathVariable Long postId, @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails){
         boolean postLiked = likeService.likePost(postId, userDetails.getUser());
         LikePostResponseDto likePostResponseDto = new LikePostResponseDto(postLiked);
 
@@ -27,8 +31,9 @@ public class LikeController {
         return new ResponseEntity<>(responseMessage, HttpStatus.valueOf(responseMessage.getStatusCode()));
     }
 
+    @ApiOperation(value = "댓글 좋아요")
     @PostMapping("/comment/{commentId}")
-    public ResponseEntity<ResponseMessage> likeComment(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<ResponseMessage> likeComment(@PathVariable Long commentId, @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails){
         boolean commentLiked = likeService.likeComment(commentId, userDetails.getUser());
         LikeCommentResponseDto likeCommentResponseDto = new LikeCommentResponseDto(commentLiked);
 
