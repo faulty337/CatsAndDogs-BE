@@ -45,11 +45,11 @@ public class PostController {
 
     @ApiOperation(value = "게시물 작성")
     @PostMapping
-    public ResponseEntity createPost(@RequestPart(value = "file") MultipartFile file,
+    public ResponseEntity createPost(@RequestParam(value="image") MultipartFile image,
                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
                                      @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
 
-        PostResponseDto postResponseDto = postService.createPost(requestDto, file, userDetails.getUser());
+        PostResponseDto postResponseDto = postService.createPost(requestDto, image, userDetails.getUser());
         ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 작성 성공", 200, postResponseDto);
         return new ResponseEntity(responseMessage, HttpStatus.OK);
     }
@@ -58,7 +58,7 @@ public class PostController {
     @ApiOperation(value = "게시물 수정")
     @PutMapping("/{postId}") // 선택 게시글 수정
     public ResponseEntity updatePost(@PathVariable Long postId,
-                                     @RequestPart(value = "file") MultipartFile file,
+                                     @RequestParam(value="image") MultipartFile file,
                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
                                      @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
 

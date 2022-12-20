@@ -34,7 +34,8 @@ public class Post extends TimeStamped {
 
     private String picturePath; // 사진 저장 경로
 
-    private String pictureName; // 사진 저장 이름
+    private String pictureName;
+
 
     private CategoryEnum category;
 
@@ -63,14 +64,14 @@ public class Post extends TimeStamped {
     }
 
 
-    public Post(PostRequestDto requestDto, String picturePath, String pictureName, String nickname) {
+    public Post(PostRequestDto requestDto, String nickname, String picturePath, String pictureName) {
 
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
+        this.nickname = nickname;
         this.picturePath = picturePath;
         this.pictureName = pictureName;
-        this.nickname = nickname;
 
     }
 
@@ -80,6 +81,7 @@ public class Post extends TimeStamped {
         this.category = requestDto.getCategory();
         this.picturePath = picturePath;
         this.pictureName = pictureName;
+
 
     }
 

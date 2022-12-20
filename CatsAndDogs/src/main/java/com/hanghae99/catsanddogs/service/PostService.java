@@ -7,7 +7,9 @@ import com.hanghae99.catsanddogs.entity.User;
 import com.hanghae99.catsanddogs.exception.CustomException;
 import com.hanghae99.catsanddogs.exception.ErrorCode;
 import com.hanghae99.catsanddogs.repository.PostRepository;
+import com.hanghae99.catsanddogs.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
+
+    @Autowired
+    private S3Uploader s3Uploader;
 
 
     @Transactional(readOnly = true)
@@ -52,22 +57,20 @@ public class PostService {
 
 
     @Transactional
-    public PostResponseDto createPost(PostRequestDto requestDto, MultipartFile file, User user) throws Exception {
+    public PostResponseDto createPost(PostRequestDto requestDto, MultipartFile image, User user) throws Exception {
 
-        if(file.getContentType() == null || !file.getContentType().startsWith("image"))
+        if(image.getContentType() == null || !image.getContentType().startsWith("image"))
             throw new CustomException(ErrorCode.WRONG_IMAGE_FORMAT);
 
-
-        String picturePath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\img"; //파일 저장 경로 지정
-
         UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
-        String pictureName = uuid + "_" + file.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
-        File saveFile = new File(picturePath, pictureName);
-        file.transferTo(saveFile); // 업로드 한 파일 데이터를 지정한 파일에 저장
+        String pictureName = uuid + "_" + image.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
 
-        System.out.println("user.getNickname() = " + user.getNickname());
+        if(!image.isEmpty()) {
+            String storedFileName = s3Uploader.upload(image,"images");
+            requestDto.setPicturePath(storedFileName);
+        }
 
-        Post post = postRepository.save(new Post(requestDto, picturePath, pictureName, user.getNickname()));
+        Post post = postRepository.save(new Post(requestDto, user.getNickname(), requestDto.getPicturePath(), pictureName));
 
         return new PostResponseDto(post);
 
@@ -76,18 +79,23 @@ public class PostService {
 
 
     @Transactional
-    public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, MultipartFile file, User user) throws Exception {
+    public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, MultipartFile image, User user) throws Exception {
 
-        String picturePath = System.getProperty("user.dir") + "\\CatsAndDogs\\src\\main\\resources\\static\\img"; //파일 저장 경로 지정
+        if(image.getContentType() == null || !image.getContentType().startsWith("image"))
+            throw new CustomException(ErrorCode.WRONG_IMAGE_FORMAT);
+
         UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
-        String pictureName = uuid + "_" + file.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
-        File saveFile = new File(picturePath, pictureName);
-        file.transferTo(saveFile); // 업로드 한 파일 데이터를 지정한 파일에 저장
+        String pictureName = uuid + "_" + image.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
+
+        if(!image.isEmpty()) {
+            String storedFileName = s3Uploader.upload(image,"images");
+            requestDto.setPicturePath(storedFileName);
+        }
 
         Post post = postRepository.findByIdAndNickname(postId, user.getNickname()).orElseThrow(
                 () -> new CustomException(ErrorCode.CONTENT_NOT_FOUND)
         );
-        post.update(requestDto, picturePath, pictureName);
+        post.update(requestDto, requestDto.picturePath, pictureName);
 
         return new PostResponseDto(post);
 

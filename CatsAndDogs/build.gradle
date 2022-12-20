@@ -41,6 +41,8 @@ dependencies {
 
 	implementation("io.springfox:springfox-swagger2:2.9.2")
 	implementation("io.springfox:springfox-swagger-ui:2.9.2")
+
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // s3의존성 추가
 }
 
 tasks.named('test') {
