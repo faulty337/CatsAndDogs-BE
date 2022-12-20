@@ -70,7 +70,7 @@ public class PostService {
             requestDto.setPicturePath(storedFileName);
         }
 
-        Post post = postRepository.save(new Post(requestDto, user.getNickname(), requestDto.getPicturePath(), pictureName));
+        Post post = postRepository.save(new Post(requestDto, user, requestDto.getPicturePath(), pictureName));
 
         return new PostResponseDto(post);
 
@@ -81,7 +81,7 @@ public class PostService {
     @Transactional
     public PostResponseDto updatePost(Long postId, PostRequestDto requestDto, MultipartFile image, User user) throws Exception {
 
-        if(image.getContentType() == null || !image.getContentType().startsWith("image"))
+        if(!image.getContentType().startsWith("image"))
             throw new CustomException(ErrorCode.WRONG_IMAGE_FORMAT);
 
         UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
@@ -92,9 +92,15 @@ public class PostService {
             requestDto.setPicturePath(storedFileName);
         }
 
-        Post post = postRepository.findByIdAndNickname(postId, user.getNickname()).orElseThrow(
-                () -> new CustomException(ErrorCode.CONTENT_NOT_FOUND)
-        );
+//        Post post = postRepository.findByIdAndUsers(postId, user).orElseThrow(
+//                () -> new CustomException(ErrorCode.CONTENT_NOT_FOUND)
+//        );
+
+        Post post = postRepository.findById(postId).orElseThrow(()-> new CustomException(ErrorCode.CONTENT_NOT_FOUND));
+
+        if(!post.getUsers().getId().equals(user.getId())){
+            throw new CustomException(ErrorCode.AUTHORIZATION_UPDATE_FAIL);
+        }
         post.update(requestDto, requestDto.picturePath, pictureName);
 
         return new PostResponseDto(post);

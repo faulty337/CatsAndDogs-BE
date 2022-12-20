@@ -11,5 +11,5 @@ import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTop2ByCreatedAtAfterOrderByLikeCountDesc(LocalDateTime localDateTime);
-    Optional<Post> findByIdAndNickname(Long postId, String nickname);
+    Optional<Post> findByIdAndUsers(Long postId, User user);
 }

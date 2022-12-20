@@ -26,7 +26,6 @@ public class Post extends TimeStamped {
 
     private long likeCount;
 
-    private String nickname;
 
 
 
@@ -44,7 +43,9 @@ public class Post extends TimeStamped {
     private List<LikePost> likePostList = new ArrayList<>();
 
     @ManyToOne
-    private User user;
+    private User users;
+
+
 
     @OneToMany
     @JoinColumn(name = "postId")
@@ -64,12 +65,12 @@ public class Post extends TimeStamped {
     }
 
 
-    public Post(PostRequestDto requestDto, String nickname, String picturePath, String pictureName) {
+    public Post(PostRequestDto requestDto, User user, String picturePath, String pictureName) {
 
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
-        this.nickname = nickname;
+        this.users = user;
         this.picturePath = picturePath;
         this.pictureName = pictureName;
 

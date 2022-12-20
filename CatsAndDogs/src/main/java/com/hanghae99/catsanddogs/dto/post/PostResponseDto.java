@@ -31,7 +31,7 @@ public class PostResponseDto {
     public PostResponseDto(Post post, Long userId){
         this.id = post.getId();
         this.title = post.getTitle();
-        this.nickname = post.getNickname();
+        this.nickname = post.getUsers().getNickname();
         this.content = post.getContent();
         this.likeCount = post.getLikeCount();
         this.postLike = post.getLikePostList().stream().anyMatch(likePost -> likePost.getUserId().equals(userId));
@@ -62,6 +62,6 @@ public class PostResponseDto {
         this.picturePath = post.getPicturePath();
         this.pictureName = post.getPictureName();
         this.category = post.getCategory();
-        this.nickname = post.getNickname();
+        this.nickname = post.getUsers().getNickname();
     }
 }
