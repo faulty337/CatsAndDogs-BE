@@ -14,8 +14,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private Long kakaoId;
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private SocialEnum social;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -30,8 +31,8 @@ public class User {
     private String email;
 
     //기존 회원이 확인되면 카카오 아이디 업데이트
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
+    public User socialUpdate(SocialEnum social) {
+        this.social = social;
         return this;
     }
 
