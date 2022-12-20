@@ -45,11 +45,11 @@ public class PostController {
 
     @ApiOperation(value = "게시물 작성")
     @PostMapping
-    public ResponseEntity createPost(@RequestParam(value="image") MultipartFile image,
+    public ResponseEntity createPost(
                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
                                      @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
 
-        PostResponseDto postResponseDto = postService.createPost(requestDto, image, userDetails.getUser());
+        PostResponseDto postResponseDto = postService.createPost(requestDto,userDetails.getUser());
         ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 작성 성공", 200, postResponseDto);
         return new ResponseEntity(responseMessage, HttpStatus.OK);
     }
@@ -65,6 +65,17 @@ public class PostController {
         PostResponseDto postResponseDto = postService.updatePost(postId, requestDto, file, userDetails.getUser());
         ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 수정 성공", 200, postResponseDto);
         return new ResponseEntity(responseMessage, HttpStatus.OK);
+
+    }
+
+    @ApiOperation(value = "게시물 수정")
+    @DeleteMapping("/{postId}") // 선택 게시글 수정
+    public ResponseEntity deletePost(@PathVariable Long postId,
+                                     @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
+
+        PostResponseDto postResponseDto = postService.deletePost(postId, userDetails.getUser());
+        ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 삭제 성공", 200, postResponseDto);
+        return new ResponseEntity(responseMessage, HttpStatus.valueOf(responseMessage.getStatusCode()));
 
     }
 
