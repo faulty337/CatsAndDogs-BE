@@ -4,8 +4,8 @@ package com.hanghae99.catsanddogs.service;
         import com.fasterxml.jackson.databind.JsonNode;
         import com.fasterxml.jackson.databind.ObjectMapper;
         import com.hanghae99.catsanddogs.dto.ResponseMessage;
-        import com.hanghae99.catsanddogs.dto.user.KakaoUserInfoDto;
-        import com.hanghae99.catsanddogs.dto.user.KakaoUserInfoDto;
+        import com.hanghae99.catsanddogs.dto.user.SocialUserInfoDto;
+        import com.hanghae99.catsanddogs.entity.SocialEnum;
         import com.hanghae99.catsanddogs.entity.User;
         import com.hanghae99.catsanddogs.security.jwt.JwtUtil;
         import com.hanghae99.catsanddogs.repository.UserRepository;
@@ -33,7 +33,7 @@ public class KakaoService {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
         // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+        SocialUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
         // 3. 필요시에 회원가입
         User kakaoUser = registerKakaoUserIfNeeded(kakaoUserInfo);
 
@@ -75,7 +75,7 @@ public class KakaoService {
     }
 
     // 2. 토큰으로 카카오 API 호출 : "액세스 토큰"으로 "카카오 사용자 정보" 가져오기
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -89,25 +89,27 @@ public class KakaoService {
                 HttpMethod.POST,
                 kakaoUserInfoRequest,
                 String.class
+
+
         );
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-        Long id = jsonNode.get("id").asLong();
+        String id = jsonNode.get("id").asText();
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
         String email = jsonNode.get("kakao_account")
                 .get("email").asText();
 
-        return new KakaoUserInfoDto(id, nickname, email);
+        return new SocialUserInfoDto(id, email, nickname);
     }
 
     // 3. 필요시에 회원가입
-    private User registerKakaoUserIfNeeded(KakaoUserInfoDto kakaoUserInfo) {
+    private User registerKakaoUserIfNeeded(SocialUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
-        User kakaoUser = userRepository.findByKakaoId(kakaoId)
+        String kakaoId = kakaoUserInfo.getId().toString();
+        User kakaoUser = userRepository.findByUsername(kakaoId)
                 .orElse(null);
         if (kakaoUser == null) {
             // 카카오 사용자 email 동일한 email 가진 회원이 있는지 확인
@@ -116,7 +118,7 @@ public class KakaoService {
             if (sameEmailUser != null) {
                 kakaoUser = sameEmailUser;
                 // 기존 회원정보에 카카오 Id 추가
-                kakaoUser = kakaoUser.kakaoIdUpdate(kakaoId);
+                kakaoUser = kakaoUser.socialUpdate(SocialEnum.KAKAO);
             } else {
                 // 신규 회원가입
                 // password: random UUID
@@ -125,10 +127,11 @@ public class KakaoService {
 
                 kakaoUser = User.builder()
                         .nickname(kakaoUserInfo.getNicknmae())
-                        .username(kakaoEmail)
+                        .username(kakaoId)
                         .password(encodedPassword)
                         .email(kakaoEmail)
-                        .kakaoId(kakaoId).build();
+                        .social(SocialEnum.KAKAO)
+                        .build();
             }
 
             userRepository.save(kakaoUser);
