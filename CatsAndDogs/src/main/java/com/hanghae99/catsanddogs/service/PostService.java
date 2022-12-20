@@ -71,8 +71,17 @@ public class PostService {
 
 
     @Transactional
-    public PostResponseDto createPost(PostRequestDto requestDto, User user) throws Exception {
+    public PostResponseDto createPost(PostRequestDto requestDto, MultipartFile image, User user) throws Exception {
+        if(image.getContentType() == null || !image.getContentType().startsWith("image"))
+            throw new CustomException(ErrorCode.WRONG_IMAGE_FORMAT);
 
+        UUID uuid = UUID.randomUUID(); // 파일 이름에 붙일 랜덤 식별자
+        String pictureName = uuid + "_" + image.getOriginalFilename(); // 새로운 이름 - 이름이 같으면 오류나서 이렇게 해줌
+
+        if(!image.isEmpty()) {
+            String storedFileName = s3Uploader.upload(image,"images");
+            requestDto.setPicturePath(storedFileName);
+        }
         Post post = postRepository.save(new Post(requestDto, user, requestDto.getPicturePath(), "pictureName"));
 
         return new PostResponseDto(post);

@@ -47,9 +47,10 @@ public class PostController {
     @PostMapping
     public ResponseEntity createPost(
                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
+                                     @RequestParam(value="image") MultipartFile file,
                                      @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
 
-        PostResponseDto postResponseDto = postService.createPost(requestDto,userDetails.getUser());
+        PostResponseDto postResponseDto = postService.createPost(requestDto, file, userDetails.getUser());
         ResponseMessage<PostResponseDto> responseMessage = new ResponseMessage<>("게시글 작성 성공", 200, postResponseDto);
         return new ResponseEntity(responseMessage, HttpStatus.OK);
     }
