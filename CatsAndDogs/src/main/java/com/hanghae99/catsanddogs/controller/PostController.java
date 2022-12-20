@@ -58,7 +58,7 @@ public class PostController {
     @ApiOperation(value = "게시물 수정")
     @PutMapping("/{postId}") // 선택 게시글 수정
     public ResponseEntity updatePost(@PathVariable Long postId,
-                                     @RequestPart(value = "file") MultipartFile file,
+                                     @RequestParam(value="image") MultipartFile file,
                                      @RequestPart(value = "requestDto") PostRequestDto requestDto,
                                      @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception{
 
