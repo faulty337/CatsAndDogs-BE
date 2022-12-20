@@ -96,7 +96,8 @@ public class UserService {
         if (!passwordEncoder.matches(password, user.getPassword())){
             throw new CustomException(ErrorCode.INCORRECT_PASSWORD);
         }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
-        return new ResponseEntity<ResponseMessage>(new ResponseMessage("로그인 성공", 200, null), HttpStatus.OK);
+        String token = jwtUtil.createToken(user.getUsername());
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        return new ResponseEntity<ResponseMessage>(new ResponseMessage("로그인 성공", 200, token), HttpStatus.OK);
     }
 }
