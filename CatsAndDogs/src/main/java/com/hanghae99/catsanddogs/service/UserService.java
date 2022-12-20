@@ -3,6 +3,7 @@ package com.hanghae99.catsanddogs.service;
 import com.hanghae99.catsanddogs.dto.ResponseMessage;
 import com.hanghae99.catsanddogs.dto.user.LoginRequestDto;
 import com.hanghae99.catsanddogs.dto.user.SignupRequestDto;
+import com.hanghae99.catsanddogs.entity.SocialEnum;
 import com.hanghae99.catsanddogs.entity.User;
 import com.hanghae99.catsanddogs.exception.CustomException;
 import com.hanghae99.catsanddogs.exception.ErrorCode;
@@ -54,8 +55,12 @@ public class UserService {
         //이메일 중복 확인
         Optional<User> checkEmail = userRepository.findByEmail(signupRequestDto.getEmail());
         if (checkEmail.isPresent()) {
-            if(checkEmail.get().getKakaoId() != null){
-                throw new CustomException(ErrorCode.DUPLICATE_KAKAO_EMAIL);
+            if(checkEmail.get().getSocial() != null){
+                if(checkEmail.get().getSocial() == SocialEnum.KAKAO) {
+                    throw new CustomException(ErrorCode.DUPLICATE_KAKAO_EMAIL);
+                }else if(checkEmail.get().getSocial() == SocialEnum.GOOGLE){
+                    throw new CustomException(ErrorCode.DUPLICATE_GOOGLE_EMAIL);
+                }
             }
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
