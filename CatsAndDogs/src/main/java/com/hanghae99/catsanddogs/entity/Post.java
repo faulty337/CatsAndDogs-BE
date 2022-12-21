@@ -82,8 +82,6 @@ public class Post extends TimeStamped {
         this.category = requestDto.getCategory();
         this.picturePath = picturePath;
         this.pictureName = pictureName;
-
-
     }
 
 

@@ -18,7 +18,7 @@ public class Comment extends TimeStamped {
 
     private String content;
 
-    private Long likeCount;
+    private long likeCount;
 
     @OneToMany
     @JoinColumn(name = "commentId")
