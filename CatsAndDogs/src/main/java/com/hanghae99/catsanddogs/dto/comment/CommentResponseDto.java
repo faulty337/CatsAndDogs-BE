@@ -24,12 +24,6 @@ public class CommentResponseDto {
         this.content = comment.getContent();
         this.nickname = comment.getUser().getNickname();
         this.commentLike = comment.getLikeCommentList().stream().anyMatch(likeComment -> likeComment.getUserId().equals(userId));
-//        for(LikeComment likeComment : comment.getLikeCommentList()){
-//            if(likeComment.getUserId().equals(userId)){
-//                this.commentLike = true;
-//                break;
-//            }
-//        }
         this.createdAt = comment.getCreatedAt();
         this.likeCount = comment.getLikeCount();
     }

@@ -38,9 +38,9 @@ public class UserController {
         return userService.login(loginRequestDto, response);
     }
 
-    @GetMapping("/login/kakao")//해당 요청은 프론트에서 직접오는게 아닌 카카오에서 옴
+    @GetMapping("/login/kakao")
     public ResponseEntity<ResponseMessage> kakaoLogin(@RequestParam String code
-            , HttpServletResponse response/*kakao에서 받아오기 때문에 response*/)
+            , HttpServletResponse response)
             throws JsonProcessingException {
 
         return kakaoService.kakaoLogin(code, response);

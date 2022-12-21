@@ -3,6 +3,8 @@ package com.hanghae99.catsanddogs.controller;
 import com.hanghae99.catsanddogs.dto.LikeCommentResponseDto;
 import com.hanghae99.catsanddogs.dto.LikePostResponseDto;
 import com.hanghae99.catsanddogs.dto.ResponseMessage;
+import com.hanghae99.catsanddogs.repository.CommentRepository;
+import com.hanghae99.catsanddogs.repository.LikeCommentRepository;
 import com.hanghae99.catsanddogs.security.UserDetails.UserDetailsImpl;
 import com.hanghae99.catsanddogs.service.LikeService;
 import io.swagger.annotations.ApiOperation;
@@ -20,11 +22,11 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @ApiOperation(value = "댓글 좋아요")
+    @ApiOperation(value = "게시글 좋아요")
     @PostMapping("/post/{postId}")
     public ResponseEntity<ResponseMessage> likePost(@PathVariable Long postId, @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails){
-        boolean postLiked = likeService.likePost(postId, userDetails.getUser());
-        LikePostResponseDto likePostResponseDto = new LikePostResponseDto(postLiked);
+
+        LikePostResponseDto likePostResponseDto = likeService.likePost(postId, userDetails.getUser());
 
         ResponseMessage<LikePostResponseDto> responseMessage = new ResponseMessage<>("게시글 좋아요 성공", 200, likePostResponseDto);
 
@@ -34,8 +36,9 @@ public class LikeController {
     @ApiOperation(value = "댓글 좋아요")
     @PostMapping("/comment/{commentId}")
     public ResponseEntity<ResponseMessage> likeComment(@PathVariable Long commentId, @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails){
-        boolean commentLiked = likeService.likeComment(commentId, userDetails.getUser());
-        LikeCommentResponseDto likeCommentResponseDto = new LikeCommentResponseDto(commentLiked);
+
+
+        LikeCommentResponseDto likeCommentResponseDto = likeService.likeComment(commentId, userDetails.getUser());
 
         ResponseMessage<LikeCommentResponseDto> responseMessage = new ResponseMessage<>("댓글 좋아요 성공", 200, likeCommentResponseDto);
 

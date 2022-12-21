@@ -30,7 +30,7 @@ class CommentController {
         CommentResponseDto commentResponseDto = commentService.createComment(postId, userId, commentRequestDto.getContent());
         ResponseMessage<CommentResponseDto> responseMessage = new ResponseMessage<>("댓글 작성 성공", 200, commentResponseDto);
 
-        return new ResponseEntity(responseMessage, HttpStatus.OK);
+        return new ResponseEntity(responseMessage, HttpStatus.valueOf(responseMessage.getStatusCode()));
     }
 
     @ApiOperation(value = "댓글 삭제")
@@ -44,14 +44,6 @@ class CommentController {
         commentService.deleteComment(commentId, userId, postId);
         ResponseMessage<CommentResponseDto> responseMessage = new ResponseMessage<>("댓글 삭제 성공", 200, null);
 
-        return new ResponseEntity(responseMessage, HttpStatus.OK);
+        return new ResponseEntity(responseMessage, HttpStatus.valueOf(responseMessage.getStatusCode()));
     }
-
-    //응답 예시(ResponseEntity)
-//    @GetMapping
-//    public ResponseEntity<ResponseMessage> commentTest(){
-//        CommentResponseDto commentResponseDto = new CommentResponseDto("댓글");
-//        ResponseMessage<CommentResponseDto> responseMessage = new ResponseMessage("test", 200, commentResponseDto);
-//        return new ResponseEntity<ResponseMessage>(responseMessage, HttpStatus.OK);
-//    }
 }

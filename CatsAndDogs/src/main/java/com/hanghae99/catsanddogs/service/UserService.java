@@ -34,25 +34,24 @@ public class UserService {
         String username = signupRequestDto.getUsername();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
-        //username과 password형식 검증
         Pattern userPattern = Pattern.compile("^(?=.*[a-z])(?=.*\\d)[a-z\\d]{4,10}$");
         Pattern pwPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,15}$");
 
-        //username 형식 확인
+
         if(!userPattern.matcher(username).find()){
             throw new CustomException(ErrorCode.INVALID_USERNAME_PATTERN);
         }
-        //pw 형식 확인,
+
         if(!pwPattern.matcher(signupRequestDto.getPassword()).find()){
             throw new CustomException(ErrorCode.INVALID_PASSWORD_PATTERN);
         }
 
-        //회원 중복 확인
+
         Optional<User> checkUser = userRepository.findByUsername(username);
         if (checkUser.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_USERNAME);
         }
-        //이메일 중복 확인
+
         Optional<User> checkEmail = userRepository.findByEmail(signupRequestDto.getEmail());
         if (checkEmail.isPresent()) {
             if(checkEmail.get().getSocial() != null){
@@ -64,12 +63,12 @@ public class UserService {
             }
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
-        //닉네임 중복 확인
+
         Optional<User> checkNickname = userRepository.findByNickname(signupRequestDto.getNickname());
         if (checkNickname.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_NICKNAME);
         }
-        //닉네임과 이메일 빈 값 체크
+
         if(signupRequestDto.getEmail()==null || signupRequestDto.getNickname()==null){
             throw new CustomException(ErrorCode.REQUIRED_ALL);
         }

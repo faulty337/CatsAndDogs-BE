@@ -1,5 +1,6 @@
 package com.hanghae99.catsanddogs.service;
 
+import com.hanghae99.catsanddogs.dto.LikeCommentResponseDto;
 import com.hanghae99.catsanddogs.dto.LikePostResponseDto;
 import com.hanghae99.catsanddogs.dto.ResponseMessage;
 import com.hanghae99.catsanddogs.entity.*;
@@ -31,53 +32,57 @@ public class LikeService {
     private final LikeCommentRepository likeCommentRepository;
 
     @Transactional
-    public boolean likePost(Long postId, User user) {
+    public LikePostResponseDto likePost(Long postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
                 () -> new CustomException(ErrorCode.CONTENT_NOT_FOUND)
         );
         Long userId = user.getId();
 
-        //좋아요 했는지 확인
+        boolean likeCheck;
+
         Optional <LikePost> likePost = likePostRepository.findByPostIdAndUserId(postId, userId);
 
         if (likePost.isPresent()) {
             LikePost like = likePost.get();
             likePostRepository.delete(like);
-            Long likeCount = likePostRepository.countByPostId(postId);
-            post.setLikecount(post.getLikeCount()-1);
+            post.setLikeCount(post.getLikeCount()-1);
 
-            return false;
+            likeCheck = false;
 
         } else{
             LikePost like = new LikePost(postId, userId);
             likePostRepository.save(like);
-            Long likeCount = likePostRepository.countByPostId(postId);
-            post.setLikecount(post.getLikeCount()+1);
-            return true;
+            post.setLikeCount(post.getLikeCount()+1);
+            likeCheck = true;
         }
+
+
+        return new LikePostResponseDto(likeCheck, post.getLikeCount());
     }
 
-    public boolean likeComment(Long commentId, User user) {
+    public LikeCommentResponseDto likeComment(Long commentId, User user) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(
                 () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
         );
         Long userId = user.getId();
+
+        boolean likeCheck;
 
         Optional<LikeComment> likeComment = likeCommentRepository.findByCommentIdAndUserId(commentId, userId);
 
         if(likeComment.isPresent()){
             LikeComment like = likeComment.get();
             likeCommentRepository.delete(like);
-            Long likeCount = likeCommentRepository.countByCommentId(commentId);
             comment.setLikeCount(comment.getLikeCount()-1);
-            return false;
+            likeCheck = false;
 
         } else{
             LikeComment like = new LikeComment(commentId, userId);
-            Long likeCount = likeCommentRepository.countByCommentId(commentId);
             comment.setLikeCount(comment.getLikeCount()+1);
             likeCommentRepository.save(like);
-            return true;
+            likeCheck = true;
         }
+
+        return new LikeCommentResponseDto(likeCheck, comment.getLikeCount());
     }
 }

@@ -65,28 +65,27 @@ public class Post extends TimeStamped {
     }
 
 
-    public Post(PostRequestDto requestDto, User user, String picturePath, String pictureName) {
-
+    public Post(PostRequestDto requestDto, User user) {
+        this.pictureName = requestDto.getPictureName();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
         this.users = user;
-        this.picturePath = picturePath;
-        this.pictureName = pictureName;
 
     }
 
-    public void update(PostRequestDto requestDto, String picturePath, String pictureName) {
+
+    public void update(PostRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.category = requestDto.getCategory();
-        this.picturePath = picturePath;
-        this.pictureName = pictureName;
+        this.pictureName = requestDto.getPictureName();
+
     }
 
 
 
-    public void setLikecount(long likeCount) {
+    public void setLikeCount(long likeCount) {
         this.likeCount = likeCount;
     }
 }

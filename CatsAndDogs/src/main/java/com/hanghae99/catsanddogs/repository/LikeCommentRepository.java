@@ -12,12 +12,13 @@ import java.util.Optional;
 public interface LikeCommentRepository extends JpaRepository<LikeComment, Long> {
     Optional<LikeComment> findByCommentIdAndUserId(Long commentId, Long userId);
 
-    Long countByCommentId(Long commentId);
-    void deleteAllByCommentId(Long commentId);
+
+    @Modifying
+    @Query("DELETE from LikeComment c where c.commentId = :id")
+    void deleteAllByCommentId(@Param("id") Long postId);
 
 
     @Modifying
     @Query("DELETE from LikeComment c where c.commentId in :ids")
     void deleteAllByCommentIdIn(@Param("ids") List<Long> ids);
-//    void deleteAllByCommentIdIn(List<Long> likeCommentIdList);
 }

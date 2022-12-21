@@ -11,8 +11,6 @@ import java.util.Optional;
 public interface LikePostRepository extends JpaRepository<LikePost, Long> {
     Optional<LikePost> findByPostIdAndUserId(Long postId, Long userId);
 
-    Long countByPostId(Long postId);
-
     @Modifying
     @Query("DELETE from LikePost c where c.postId = :id")
     void deleteAllByPostId(@Param("id") Long postId);

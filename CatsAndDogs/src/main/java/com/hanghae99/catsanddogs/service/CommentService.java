@@ -37,15 +37,17 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(Long commentId, Long userId, Long postId) {
-        Post post =postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.CONTENT_NOT_FOUND));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new CustomException(ErrorCode.CONTENT_NOT_FOUND));
         Comment comment = commentRepository.findById(commentId).orElseThrow(()->new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+        if(!comment.getUser().getId().equals(userId)){
+            throw  new CustomException(ErrorCode.AUTHORIZATION_DELETE_FAIL);
+        }
+        if(!post.getCommentList().contains(comment)){
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+        }
         likeCommentRepository.deleteAllByCommentId(commentId);
         commentRepository.delete(comment);
     }
-
-//    public void deleteCommentLike(Long commentId){
-//        likeCommentRepository.deleteAllByCommentId(commentId);
-//    }
 
 
 }

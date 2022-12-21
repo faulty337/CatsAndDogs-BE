@@ -2,3 +2,4 @@ CatsAndDogs/src/main/resources/application-config.properties
 CatsAndDogs/src/main/resources/application-dbSetting.properties
 CatsAndDogs/src/main/resources/application-google.properties
 CatsAndDogs/src/main/resources/application-s3.properties
+CatsAndDogs/src/main/resources/application-kakao.properties

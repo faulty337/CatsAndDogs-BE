@@ -10,7 +10,14 @@ import lombok.Setter;
 public class LikePostResponseDto {
     private boolean postLiked;
 
-    public LikePostResponseDto(boolean postLiked){
+    private Long likeCount;
+
+
+    public LikePostResponseDto(boolean postLiked, Long likeCount) {
         this.postLiked = postLiked;
+        this.likeCount = likeCount;
     }
 }
+
+
+
