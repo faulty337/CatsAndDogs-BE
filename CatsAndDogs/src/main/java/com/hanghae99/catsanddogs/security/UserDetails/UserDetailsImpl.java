@@ -33,6 +33,10 @@ public class UserDetailsImpl implements UserDetails {
         return this.user.getId();
     }
 
+    public String getNickname(){
+        return this.user.getNickname();
+    }
+
     @Override
     public String getUsername(){
         return this.username;

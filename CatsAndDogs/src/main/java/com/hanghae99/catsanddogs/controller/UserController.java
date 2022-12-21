@@ -5,13 +5,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hanghae99.catsanddogs.dto.ResponseMessage;
 import com.hanghae99.catsanddogs.dto.user.LoginRequestDto;
 import com.hanghae99.catsanddogs.dto.user.SignupRequestDto;
+import com.hanghae99.catsanddogs.exception.CustomException;
+import com.hanghae99.catsanddogs.exception.ErrorCode;
+import com.hanghae99.catsanddogs.security.UserDetails.UserDetailsImpl;
 import com.hanghae99.catsanddogs.service.GoogleService;
 import com.hanghae99.catsanddogs.service.KakaoService;
 import com.hanghae99.catsanddogs.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,6 +63,17 @@ public class UserController {
             throws JsonProcessingException {
 
         return googleService.googleLogin(code, response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseMessage> getNickname(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+            ){
+        if(userDetails == null){
+            throw new CustomException(ErrorCode.USERNAME_NOT_FOUND);
+        }
+        ResponseMessage<?> responseMessage = new ResponseMessage<>("요청 성공", 200, userDetails.getNickname());
+        return new ResponseEntity<>(responseMessage, HttpStatus.valueOf(responseMessage.getStatusCode()));
     }
 
 }
