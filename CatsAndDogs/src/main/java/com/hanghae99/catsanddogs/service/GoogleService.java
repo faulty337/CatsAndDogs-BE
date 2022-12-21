@@ -38,10 +38,10 @@ public class GoogleService {
     @Value("${google.secret}")
     private String googleClientSecret;
     @Value("${google.redirect.uri}")
-    private String googleRedirecUrl;
+    private String googleRedirectUrl;
 
     public String getGoogleUrl(){
-        return googleLoginUrl + "/o/oauth2/v2/auth?client_id=" + googleClientId + "&redirect_uri=" + googleRedirecUrl
+        return googleLoginUrl + "/o/oauth2/v2/auth?client_id=" + googleClientId + "&redirect_uri=" + googleRedirectUrl
                 + "&response_type=code&scope=email%20profile%20openid&access_type=offline";
 
     }
@@ -65,7 +65,7 @@ public class GoogleService {
         params.add("code", code);
         params.add("client_id", googleClientId);
         params.add("client_secret", googleClientSecret);
-        params.add("redirect_uri", googleRedirecUrl);
+        params.add("redirect_uri", googleRedirectUrl);
         params.add("grant_type", "authorization_code");
 
         HttpHeaders headers = new HttpHeaders();

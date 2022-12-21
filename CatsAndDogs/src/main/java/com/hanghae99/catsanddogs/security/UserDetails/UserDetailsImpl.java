@@ -22,14 +22,15 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//    admin권한 기능이 없으므로 임시적으로 비활성화
-//        UserRoleEnum role = user.getRole();
-//        String authority = role.getAuthority();
+
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("user"/*임시적으로 유저로 고정*/);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(simpleGrantedAuthority);
 
         return authorities;
+    }
+    public Long getId(){
+        return this.user.getId();
     }
 
     @Override
@@ -62,4 +63,6 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
+
+
 }

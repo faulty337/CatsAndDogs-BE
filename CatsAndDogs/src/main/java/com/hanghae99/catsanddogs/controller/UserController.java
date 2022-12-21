@@ -8,6 +8,7 @@ import com.hanghae99.catsanddogs.dto.user.SignupRequestDto;
 import com.hanghae99.catsanddogs.service.GoogleService;
 import com.hanghae99.catsanddogs.service.KakaoService;
 import com.hanghae99.catsanddogs.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
@@ -25,19 +26,21 @@ public class UserController {
     private final KakaoService kakaoService;
     private final GoogleService googleService;
 
+    @ApiOperation(value = "회원 가입")
     @PostMapping("/signup")
     public ResponseEntity<ResponseMessage> signup(@RequestBody @Valid SignupRequestDto signupRequestDto){
         return userService.signup(signupRequestDto);
     }
 
+    @ApiOperation(value = "로그인")
     @PostMapping("/login")
     public ResponseEntity<ResponseMessage> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
         return userService.login(loginRequestDto, response);
     }
 
-    @GetMapping("/login/kakao")//해당 요청은 프론트에서 직접오는게 아닌 카카오에서 옴
+    @GetMapping("/login/kakao")
     public ResponseEntity<ResponseMessage> kakaoLogin(@RequestParam String code
-            , HttpServletResponse response/*kakao에서 받아오기 때문에 response*/)
+            , HttpServletResponse response)
             throws JsonProcessingException {
 
         return kakaoService.kakaoLogin(code, response);

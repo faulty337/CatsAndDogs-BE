@@ -1,7 +1,7 @@
 package com.hanghae99.catsanddogs.entity;
 
-
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,7 +9,8 @@ import java.util.List;
 
 @Entity
 @Getter
-public class Comment extends TimeStamped{
+@NoArgsConstructor
+public class Comment extends TimeStamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +18,7 @@ public class Comment extends TimeStamped{
 
     private String content;
 
-    private Long likeCount;
+    private long likeCount;
 
     @OneToMany
     @JoinColumn(name = "commentId")
@@ -27,5 +28,12 @@ public class Comment extends TimeStamped{
     private User user;
 
 
-
+    public void setLikeCount(long likeCount) {
+        this.likeCount = likeCount;
+    }
+    public Comment(String content, User user) {
+        this.content = content;
+        this.user = user;
+    }
 }
+

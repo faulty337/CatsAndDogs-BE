@@ -11,6 +11,7 @@ package com.hanghae99.catsanddogs.service;
         import com.hanghae99.catsanddogs.repository.UserRepository;
         import lombok.RequiredArgsConstructor;
         import lombok.extern.slf4j.Slf4j;
+        import org.springframework.beans.factory.annotation.Value;
         import org.springframework.http.*;
         import org.springframework.security.crypto.password.PasswordEncoder;
         import org.springframework.stereotype.Service;
@@ -29,6 +30,12 @@ public class KakaoService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+    @Value("${kakao.client.id}")
+    private String kakaoClientId;
+
+    @Value("${kakao.redirect.uri}")
+    private String kakaoRedirectUri;
+
     public ResponseEntity<ResponseMessage> kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getToken(code);
@@ -40,7 +47,7 @@ public class KakaoService {
         // 4. JWT 토큰 반환
         String createToken =  jwtUtil.createToken(kakaoUser.getUsername());
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, createToken);
-        return new ResponseEntity<ResponseMessage>(new ResponseMessage("로그인 성공", 200, null), HttpStatus.OK);
+        return new ResponseEntity<ResponseMessage>(new ResponseMessage("로그인 성공", 200, createToken), HttpStatus.OK);
     }
 
     // 1. "인가 코드"로 "액세스 토큰" 요청
@@ -52,8 +59,8 @@ public class KakaoService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "4f34fa0d67b1ae315cf02207cee3027a");
-        body.add("redirect_uri", "http://localhost:8080/user/login/kakao");
+        body.add("client_id", kakaoClientId);
+        body.add("redirect_uri", kakaoRedirectUri);
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -89,8 +96,6 @@ public class KakaoService {
                 HttpMethod.POST,
                 kakaoUserInfoRequest,
                 String.class
-
-
         );
 
         String responseBody = response.getBody();
@@ -119,8 +124,10 @@ public class KakaoService {
                 kakaoUser = sameEmailUser;
                 // 기존 회원정보에 카카오 Id 추가
                 kakaoUser = kakaoUser.socialUpdate(SocialEnum.KAKAO);
+
             } else {
                 // 신규 회원가입
+
                 // password: random UUID
                 String password = UUID.randomUUID().toString();
                 String encodedPassword = passwordEncoder.encode(password);
